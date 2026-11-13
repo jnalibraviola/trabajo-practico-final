@@ -30,35 +30,82 @@ export default function RegisterScreen({ navigation }) {
 
   
   return (
-    <View>
+    <View style={{
+        flex: 1,
+        backgroundColor: '#f1f5f9',
+        justifyContent: 'center',
+        padding: 25
+    }}>
 
-      <Text>Crear cuenta</Text>
+        <View style={{
+            backgroundColor: '#ffffff',
+            padding: 25,
+            borderRadius: 15,
+            elevation: 4,
+            gap: 15
+        }}>
 
-      <TextInput
-        placeholder="Correo electrónico"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+            <Text style={{
+                fontSize: 28,
+                fontWeight: 'bold',
+                color: '#1e293b',
+                textAlign: 'center'
+            }}>
+                Crear cuenta
+            </Text>
 
-      <TextInput
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-      />
+            <Text style={{
+                fontSize: 15,
+                color: '#64748b',
+                textAlign: 'center',
+                marginBottom: 10
+            }}>
+                Registrate para comenzar
+            </Text>
 
-      <Button
-        title="Crear usuario"
-        onPress={handleCreateUser}
-      />
+            <TextInput
+                placeholder="Correo electrónico"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                style={{
+                    backgroundColor: '#f8fafc',
+                    borderWidth: 1,
+                    borderColor: '#cbd5e1',
+                    borderRadius: 8,
+                    padding: 12
+                }}
+            />
 
-      <Button
-        title="Ya tengo una cuenta"
-        onPress={() => navigation.navigate('Login')}
-      />
+            <TextInput
+                placeholder="Contraseña"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={true}
+                style={{
+                    backgroundColor: '#f8fafc',
+                    borderWidth: 1,
+                    borderColor: '#cbd5e1',
+                    borderRadius: 8,
+                    padding: 12
+                }}
+            />
+
+            <Button
+                title="Crear usuario"
+                onPress={handleCreateUser}
+                color="#2563eb"
+            />
+
+            <Button
+                title="Ya tengo una cuenta"
+                onPress={() => navigation.navigate('Login')}
+                color="#64748b"
+            />
+
+        </View>
 
     </View>
-  );
+);
 }

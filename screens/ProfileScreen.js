@@ -66,35 +66,110 @@ export default function ProfileScreen() {
         }
     };
 
-    return (
-        <View>
-            <Text>{user?.email}</Text>
-            <Text>{user?.uid}</Text>
+   
+return (
+    <View style={{
+        flex: 1,
+        backgroundColor: '#f1f5f9',
+        padding: 20
+    }}>
+
+        <View style={{
+            backgroundColor: '#ffffff',
+            padding: 20,
+            borderRadius: 15,
+            elevation: 4,
+            marginBottom: 15
+        }}>
+
+            <Text style={{
+                fontSize: 25,
+                fontWeight: 'bold',
+                color: '#1e293b',
+                marginBottom: 10,
+                textAlign: 'center'
+            }}>
+                Mi perfil
+            </Text>
+
+            <Text style={{
+                fontSize: 14,
+                color: '#64748b',
+                marginBottom: 5
+            }}>
+                Correo: {user?.email}
+            </Text>
+
+            <Text style={{
+                fontSize: 12,
+                color: '#94a3b8'
+            }}>
+                ID: {user?.uid}
+            </Text>
+
+        </View>
+
+        <View style={{
+            backgroundColor: '#ffffff',
+            padding: 20,
+            borderRadius: 15,
+            elevation: 4,
+            marginBottom: 15,
+            gap: 10
+        }}>
+
+            <Text style={{
+                fontSize: 19,
+                fontWeight: 'bold',
+                color: '#1e293b',
+                marginBottom: 5
+            }}>
+                Navegación
+            </Text>
 
             <Button
                 title="Ir a Home"
                 onPress={() => navigation.navigate('Home')}
+                color="#2563eb"
             />
 
             <Button
                 title="Ir a Ubicación"
                 onPress={() => navigation.navigate('Location')}
+                color="#2563eb"
             />
 
-            <Button
-                title="ir a mapa"
-                onPress={() => navigation.navigate('Mapa')}
-            />
 
-            <Button
-                title="ir a publicaciones"
-                onPress={() => navigation.navigate('posts')}
-            />
+        </View>
+
+        <View style={{
+            backgroundColor: '#ffffff',
+            padding: 20,
+            borderRadius: 15,
+            elevation: 4,
+            gap: 12
+        }}>
+
+            <Text style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                color: '#1e293b',
+                marginBottom: 5
+            }}>
+                Completar perfil
+            </Text>
 
             <TextInput
                 placeholder="Nombre"
                 value={nombre}
                 onChangeText={setNombre}
+                style={{
+                    backgroundColor: '#f8fafc',
+                    borderWidth: 1,
+                    borderColor: '#cbd5e1',
+                    borderRadius: 8,
+                    padding: 12
+                }}
             />
 
             <TextInput
@@ -102,18 +177,43 @@ export default function ProfileScreen() {
                 value={edad}
                 onChangeText={setEdad}
                 keyboardType="numeric"
+                style={{
+                    backgroundColor: '#f8fafc',
+                    borderWidth: 1,
+                    borderColor: '#cbd5e1',
+                    borderRadius: 8,
+                    padding: 12
+                }}
             />
 
-            <Button title="Elegir imagen" onPress={pickImage} />
+            <Button
+                title="Elegir imagen"
+                onPress={pickImage}
+                color="#64748b"
+            />
 
             {image && (
                 <Image
                     source={{ uri: image }}
-                    style={{ width: 200, height: 200 }}
+                    style={{
+                        width: 180,
+                        height: 180,
+                        borderRadius: 12,
+                        alignSelf: 'center',
+                        marginVertical: 10
+                    }}
                 />
             )}
 
-            <Button title="Guardar perfil" onPress={guardarPerfil} />
+            <Button
+                title="Guardar perfil"
+                onPress={guardarPerfil}
+                color="#2563eb"
+            />
+
         </View>
-    );
+
+    </View>
+);
+
 }

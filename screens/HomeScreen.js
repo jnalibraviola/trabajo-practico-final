@@ -20,7 +20,11 @@ import {
 
 export default function HomeScreen() {
   const [titulo, setTitulo] = useState('');
+  const [descripcion, setDescripcion] = useState('');
   const [tareas, setTareas] = useState([]);
+
+  // Identifica si estamos editando una tarea
+  const [tareaEditando, setTareaEditando] = useState(null);
 
   // Obtener las tareas al abrir la pantalla
   useEffect(() => {
@@ -38,35 +42,62 @@ export default function HomeScreen() {
     }
   };
 
-  // Crear una tarea
-  const agregarTarea = async () => {
+  // Limpiar los campos
+  const limpiarFormulario = () => {
+    setTitulo('');
+    setDescripcion('');
+    setTareaEditando(null);
+  };
+
+  // Crear o modificar una tarea
+  const guardarTarea = async () => {
     if (titulo.trim() === '') {
       Alert.alert('Aviso', 'Escribí el título de la tarea');
       return;
     }
 
     try {
-      const user = getAuth().currentUser;
+      // Si existe un ID, modificamos la tarea
+      if (tareaEditando !== null) {
+        await updateTask(tareaEditando, {
+          titulo: titulo.trim(),
+          descripcion: descripcion.trim()
+        });
 
-      if (!user) {
-        Alert.alert('Error', 'Tenés que iniciar sesión');
-        return;
+        Alert.alert('Éxito', 'Tarea modificada correctamente');
+      } else {
+        // Si no existe un ID, creamos una tarea
+        const user = getAuth().currentUser;
+
+        if (!user) {
+          Alert.alert('Error', 'Tenés que iniciar sesión');
+          return;
+        }
+
+        await createTask({
+          titulo: titulo.trim(),
+          descripcion: descripcion.trim(),
+          completada: false,
+          userId: user.uid
+        });
+
+        Alert.alert('Éxito', 'Tarea creada correctamente');
       }
 
-      await createTask({
-        titulo: titulo.trim(),
-        completada: false,
-        userId: user.uid
-      });
-
-      setTitulo('');
-
+      limpiarFormulario();
       await cargarTareas();
 
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', 'No se pudo crear la tarea');
+      Alert.alert('Error', 'No se pudo guardar la tarea');
     }
+  };
+
+  // Cargar los datos de una tarea en el formulario
+  const editarTarea = (tarea) => {
+    setTitulo(tarea.titulo);
+    setDescripcion(tarea.descripcion || '');
+    setTareaEditando(tarea.id);
   };
 
   // Marcar una tarea como completada o pendiente
@@ -98,26 +129,60 @@ export default function HomeScreen() {
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
+
       <Text style={{ fontSize: 24, marginBottom: 20 }}>
         Mis tareas
       </Text>
 
+      {/* Campo para el título */}
       <TextInput
-        placeholder="Escribí una tarea"
+        placeholder="Nombre de la tarea"
         value={titulo}
         onChangeText={setTitulo}
         style={{
           borderWidth: 1,
           borderColor: '#999',
           padding: 10,
-          marginBottom: 10
+          marginBottom: 10,
+          borderRadius: 5
         }}
       />
 
-      <Button
-        title="Agregar tarea"
-        onPress={agregarTarea}
+      {/* Campo para la descripción */}
+      <TextInput
+        placeholder="Descripción de la tarea"
+        value={descripcion}
+        onChangeText={setDescripcion}
+        multiline
+        style={{
+          borderWidth: 1,
+          borderColor: '#999',
+          padding: 10,
+          marginBottom: 10,
+          borderRadius: 5,
+          minHeight: 80,
+          textAlignVertical: 'top'
+        }}
       />
+
+      {/* Botón para guardar */}
+      <Button
+        title={
+          tareaEditando !== null
+            ? 'Guardar cambios'
+            : 'Agregar tarea'
+        }
+        onPress={guardarTarea}
+      />
+
+      {/* Botón para cancelar edición */}
+      {tareaEditando !== null && (
+        <Button
+          title="Cancelar edición"
+          color="gray"
+          onPress={limpiarFormulario}
+        />
+      )}
 
       <FlatList
         style={{ marginTop: 20 }}
@@ -136,9 +201,12 @@ export default function HomeScreen() {
               borderRadius: 8
             }}
           >
+
+            {/* Nombre de la tarea */}
             <Text
               style={{
                 fontSize: 18,
+                fontWeight: 'bold',
                 textDecorationLine: item.completada
                   ? 'line-through'
                   : 'none'
@@ -147,10 +215,17 @@ export default function HomeScreen() {
               {item.titulo}
             </Text>
 
-            <Text>
+            {/* Descripción */}
+            <Text style={{ marginTop: 5, marginBottom: 8 }}>
+              {item.descripcion || 'Sin descripción'}
+            </Text>
+
+            {/* Estado */}
+            <Text style={{ marginBottom: 8 }}>
               {item.completada ? 'Completada' : 'Pendiente'}
             </Text>
 
+            {/* Completar o dejar pendiente */}
             <Button
               title={
                 item.completada
@@ -160,14 +235,24 @@ export default function HomeScreen() {
               onPress={() => cambiarEstado(item)}
             />
 
+            {/* Editar tarea */}
+            <Button
+              title="Editar tarea"
+              color="blue"
+              onPress={() => editarTarea(item)}
+            />
+
+            {/* Eliminar tarea */}
             <Button
               title="Eliminar"
               color="red"
               onPress={() => eliminarTarea(item.id)}
             />
+
           </View>
         )}
       />
+
     </View>
   );
 }

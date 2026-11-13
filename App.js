@@ -7,7 +7,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import HomeScreen from './screens/HomeScreen'
 import LocationScreen from './screens/LocationScreen';
-import PostsScreen from './screens/PostScreen';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -51,11 +51,7 @@ export default function App() {
             options={{ title: 'Ubicación'}}
           />
 
-          <Stack.Screen
-            name="posts"
-            component={PostsScreen}
-            options={{ title: 'Publicaciones' }}
-          />
+
 
         </Stack.Navigator>
 
