@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Button, Alert, Image } from 'react-native';
+import { View, Text, TextInput, Button, Alert, Image, ScrollView } from 'react-native';
 import { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../context/AuthContext';
@@ -68,6 +68,7 @@ export default function ProfileScreen() {
 
    
 return (
+        <ScrollView>
     <View style={{
         flex: 1,
         backgroundColor: '#f1f5f9',
@@ -214,6 +215,7 @@ return (
         </View>
 
     </View>
+     </ScrollView>
 );
 
 }
